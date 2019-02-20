@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <!-- 配置参数用于Java代码动态赋值, -->
+    <properties>
+        <property name="jdbcUrl" value="jdbc:mysql://127.0.0.1:3306/yao_blog?characterEncoding=UTF-8"/>
+        <property name="username" value="root"/>
+        <property name="password" value="123456"/>
+    </properties>
+
+    <settings>
+        <!-- changes from the defaults for testing -->
+        <setting name="cacheEnabled" value="false" />
+        <setting name="useGeneratedKeys" value="true" />
+        <setting name="defaultExecutorType" value="REUSE" />
+    </settings>
+    <!-- 配置别名：在MyBatis中为一个类取别名 配置别名是为了在对象映射文件中接收参数类型和返回参数类型时使用-->
+    <typeAliases>
+    </typeAliases>
+
+    <!-- 暂时不考虑分库分表的问题 -->
+    <!-- 配置需要用到的环境;这些环境可能有很多:开发环境,生产环境   default:表示默认使用哪一个环境-->
+    <environments default="cn_yzg_test">
+        <!-- 姚振国本地环境 -->
+        <environment id="cn_yzg_test">
+            <!-- transactionManager：事务管理器 （使用的JDBC事务管理器）-->
+            <transactionManager type="JDBC"></transactionManager>
+
+            <!-- mybatis提供了3种数据源类型，分别是：POOLED,UNPOOLED,JNDI -->
+            <!-- POOLED 表示支持JDBC数据源连接池 -->
+            <!-- UNPOOLED 表示不支持数据源连接池 -->
+            <!-- JNDI 表示支持外部数据源连接池 -->
+            <!-- 直接指定自定义的数据库连接池 -->
+            <dataSource type="com.eques.eqhome.hikaricp.HikariCPDataSourceFactory">
+                <!-- 必要的三个属性,这里使用上面配置的参数值进行配置,以便于在代码中动态赋值 -->
+                <property name="jdbcUrl" value="${jdbcUrl}" />
+                <property name="username" value="${username}" />
+                <property name="password" value="${password}"/>
+
+                <!-- 选择性配置属性 -->
+
+                <!-- hikariCP会根据jdbcUrl的地址发现使用的driver类型,如果使用过程中没有报找不到driver的异常, driverClassName属性可以不必指定-->
+                <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+                <!-- 用来控制从池中返回的连接的默认自动提交行为。默认值:true -->
+                <property name="autoCommit" value="true" />
+                <!-- 从连接池中换取连接的最大等待时间,超出时间为获取到连接会抛出SQLException ,这个值最小是:250ms,默认值:30000 ms -->
+                <property name="connectionTimeout" value="30000" />
+                <!-- This property controls the maximum amount of time that a connection is allowed to sit idle in the pool.
+                This setting only applies when minimumIdle is defined to be less than maximumPoolSize.
+                Idle connections will not be retired once the pool reaches minimumIdle connections.
+                Whether a connection is retired as idle or not is subject to a maximum variation of +30 seconds, and average variation of +15 seconds.
+                A connection will never be retired as idle before this timeout. A value of 0 means that idle connections are never removed from the pool.
+                The minimum allowed value is 10000ms (10 seconds). -->
+
+                <!--
+                    连接在池中的最大空闲时间,这个配置只适用于minimumIdle 小于 maximumPoolSize 的情况;空闲连接不会在池达到最小连接时关闭,
+                    0表示永远不会从池中删除空闲连接,默认值:600000 (ms)
+                -->
+                <property name="idleTimeout" value="600000" />
+
+                <!-- 池中连接的最大生存期。正在使用的连接永远不会删除,只有当它关闭时才会被删除。
+                官方建议设置这个值,而且这个值的设定应该比任何数据库或基础设施强制的连接时间限制短几秒.0表示无限生存,当然这取决于idleTimeout设置。默认:1800000ms(30分钟) -->
+                <property name="maxLifetime" value="1800000" />
+
+                <!-- 如果您的驱动程序支持JDBC4,我们强烈建议不要设置此属性。这是为了兼容那些不支持JDBC4 Connection.isValid() API 的遗留驱动的,默认值:none -->
+                <!-- 此项不要配置,配置后会抛出mysql语句错误异常 -->
+                <!--<property name="connectionTestQuery" value="none" />-->
+
+                <!--
+                    控制HikariCP试图在池中维护的空闲连接的最小数量。如果空闲连接低于此值，且池中的总连接小于最大池大小，HikariCP将尽力快速有效地添加其他连接。
+                    但是，为了最大限度地提高性能和响应峰值需求，我们建议不要设置这个值，而是允许HikariCP充当固定大小的连接池,默认值:和maximumPoolSize一致
+                 -->
+                <property name="minimumIdle" value="10" />
+
+                <!--
+                    此属性控制池允许达到的最大大小，包括空闲连接和正在使用的连接。基本上，这个值将决定到数据库后端的实际连接的最大数量。这方面的合理值最好由您的执行环境决定。
+                    当池达到这个大小，并且没有空闲连接可用时，对getConnection()的调用将在超时之前阻塞connectionTimeout毫秒。
+                    关于该值得设置参考:https://github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing  默认值:10
+                -->
+                <property name="maximumPoolSize" value="10" />
+
+                <!-- 此属性表示连接池的用户定义名称,主要出现在日志记录和JMX管理控制台中，用于标识池和池配置。 -->
+                <property name="poolName" value="auto-generated" />
+
+            </dataSource>
+
+        </environment>
+
+    </environments>
+
+<mappers>
+
+    <mapper class="com.eques.eqhome.db.mapper.UserMapper"/>
+
+</mappers>
+
+
+
+</configuration>
