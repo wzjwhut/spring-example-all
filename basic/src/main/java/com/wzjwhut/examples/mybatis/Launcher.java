@@ -1,4 +1,4 @@
-package com.wzjwhut.examples.basic;
+package com.wzjwhut.examples.mybatis;
 
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
@@ -25,17 +25,17 @@ import javax.servlet.http.HttpServletResponse;
 @EnableScheduling //启用定时器
 @RestController   //使用restful形式
 @ControllerAdvice //未捕获的异常的处理
-@EnableAspectJAutoProxy(proxyTargetClass = true)
+@EnableAspectJAutoProxy(proxyTargetClass=true)
 @SpringBootApplication
 @Data     //自动生成setter/getter. 需要idea安装lombok插件
 @Log4j2  //lombok自动生成log4j2的log对象
 public class Launcher {
 
     @Autowired
-    CityMapper cityMapper;
+    ConfigureExample configureExample;
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args){
 
         //禁用web, 适用于非web形式的应用
         //SpringApplication app = new SpringApplication(Launcher.class);
@@ -48,7 +48,7 @@ public class Launcher {
 
     //配置一个定时器, 每30秒执行一次. 类似于linux的cron
     @Scheduled(cron = "30 * * * * ?")
-    public void mySchedule() {
+    public void mySchedule(){
         log.info("start push data scheduled!");
     }
 
@@ -56,17 +56,9 @@ public class Launcher {
     @Bean
     public ApplicationRunner runner1() {
         return args -> {
-            log.info("run1");
-            log.info("findByState: {}", cityMapper.findByState("wzj"));
-            log.info("updateState: {}", cityMapper.updateState("wzj", "nanjing"));
-            log.info("[updateState] findByName: {}", cityMapper.findByName("wzj"));
-            cityMapper.updateStateWithDynamicSQL("wzj", "us");
-            log.info("[updateStateWithDynamicSQL] findByName: {}", cityMapper.findByName("wzj"));
-//            cityMapper.updateStateWithSelectProvider("wzj", "us");
-//            log.info("[updateStateWithSelectProvider] findByName: {}", cityMapper.findByName("wzj"));
+           log.info("run1");
         };
     }
-
     @Bean
     public ApplicationRunner runner2() {
         return args -> {
@@ -76,9 +68,11 @@ public class Launcher {
 
     @RequestMapping("/")
     Object hello(HttpServletRequest req, HttpServletResponse resp, /*如果用不到这两个参数, 可以去掉*/
-                 @RequestParam(required = false) String name) {
+    @RequestParam(required = false) String name) {
         return "hello: " + name;
     }
+
+
 
 
 }

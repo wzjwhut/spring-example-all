@@ -1,4 +1,4 @@
-package com.wzjwhut.examples.basic;
+package com.wzjwhut.examples.mybatis;
 
 import lombok.Data;
 

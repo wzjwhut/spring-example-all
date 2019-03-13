@@ -1,54 +1,41 @@
-package com.wzjwhut.examples.basic;
+package com.wzjwhut.examples.mybatis;
 
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
 
 @SpringBootConfiguration //约等同于@Configuration
 @EnableAutoConfiguration //自动配置
 @EnableScheduling //启用定时器
 @RestController   //使用restful形式
 @ControllerAdvice //未捕获的异常的处理
-@EnableAspectJAutoProxy(proxyTargetClass=true)
+@EnableAspectJAutoProxy(proxyTargetClass = true)
 @SpringBootApplication
 @Data     //自动生成setter/getter. 需要idea安装lombok插件
 @Log4j2  //lombok自动生成log4j2的log对象
 public class Launcher {
 
     @Autowired
-    ConfigureExample configureExample;
+    CityMapper2 cityMapper;
 
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
         //禁用web, 适用于非web形式的应用
         //SpringApplication app = new SpringApplication(Launcher.class);
@@ -61,7 +48,7 @@ public class Launcher {
 
     //配置一个定时器, 每30秒执行一次. 类似于linux的cron
     @Scheduled(cron = "30 * * * * ?")
-    public void mySchedule(){
+    public void mySchedule() {
         log.info("start push data scheduled!");
     }
 
@@ -69,9 +56,20 @@ public class Launcher {
     @Bean
     public ApplicationRunner runner1() {
         return args -> {
-           log.info("run1");
+            log.info("run1");
+            log.info("findByState: {}", cityMapper.findByState("wzj"));
+            log.info("updateState: {}", cityMapper.updateState("wzj", "nanjing"));
+            log.info("[updateState] findByName: {}", cityMapper.findByName("wzj"));
+            cityMapper.updateStateWithDynamicSQL("wzj", "us");
+            log.info("[updateStateWithDynamicSQL] findByName: {}", cityMapper.findByName("wzj"));
+//            cityMapper.updateStateWithSelectProvider("wzj", "us");
+//            log.info("[updateStateWithSelectProvider] findByName: {}", cityMapper.findByName("wzj"));
+
+            log.info("{}", CityMapper2.Companion.updateStateMethod2());
+
         };
     }
+
     @Bean
     public ApplicationRunner runner2() {
         return args -> {
@@ -81,11 +79,9 @@ public class Launcher {
 
     @RequestMapping("/")
     Object hello(HttpServletRequest req, HttpServletResponse resp, /*如果用不到这两个参数, 可以去掉*/
-    @RequestParam(required = false) String name) {
+                 @RequestParam(required = false) String name) {
         return "hello: " + name;
     }
-
-
 
 
 }
