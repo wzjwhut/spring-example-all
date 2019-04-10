@@ -1,0 +1,5 @@
+#
+#Wed Apr 10 16:05:24 CST 2019
+com.wzjwhut.examples.Application=org.springframework.stereotype.Component
+com.wzjwhut.examples.City=javax.persistence.Entity,javax.persistence.Table
+com.wzjwhut.examples.CityRepository=org.springframework.stereotype.Component,org.springframework.data.repository.Repository

@@ -1,0 +1,4 @@
+com\wzjwhut\examples\mybatis\CityMapper.class
+META-INF\spring.components
+com\wzjwhut\examples\mybatis\City.class
+com\wzjwhut\examples\mybatis\Launcher.class
