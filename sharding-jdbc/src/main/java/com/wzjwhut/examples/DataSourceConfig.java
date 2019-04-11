@@ -33,8 +33,6 @@ public class DataSourceConfig {
         dataSourceMap.put("test_0", createDataSource("test_0"));
         dataSourceMap.put("test_1", createDataSource("test_1"));
 
-
-
         //city表的分库分表规则
         TableRuleConfiguration cityRule = new TableRuleConfiguration();
         cityRule.setLogicTable("city");

@@ -1,8 +1,8 @@
 #
-#Wed Apr 10 17:54:47 CST 2019
+#Thu Apr 11 16:18:14 CST 2019
 com.wzjwhut.examples.repository.CityRepository=org.springframework.stereotype.Component,org.springframework.data.repository.Repository
 com.wzjwhut.examples.Application=org.springframework.stereotype.Component
-com.wzjwhut.examples.repository.Person=javax.persistence.Entity,javax.persistence.Table
 com.wzjwhut.examples.DataSourceConfig=org.springframework.stereotype.Component
+com.wzjwhut.examples.repository.Person=javax.persistence.Entity,javax.persistence.Table
 com.wzjwhut.examples.repository.PersonRepository=org.springframework.stereotype.Component,org.springframework.data.repository.Repository
 com.wzjwhut.examples.repository.City=javax.persistence.Entity,javax.persistence.Table

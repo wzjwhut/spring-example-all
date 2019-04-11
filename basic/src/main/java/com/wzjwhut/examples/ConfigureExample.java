@@ -11,4 +11,8 @@ public class ConfigureExample {
         log.info("ConfigureExample init: {}", this.getClass());
     }
 
+    public void invoke(){
+        log.info("invoke");
+    }
+
 }

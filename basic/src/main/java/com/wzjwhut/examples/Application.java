@@ -63,6 +63,7 @@ public class Application {
     public ApplicationRunner runner2() {
         return args -> {
             log.info("run2");
+            configureExample.invoke();
         };
     }
 

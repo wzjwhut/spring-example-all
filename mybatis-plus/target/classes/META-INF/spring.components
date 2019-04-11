@@ -1,3 +1,4 @@
 #
-#Wed Apr 10 15:44:33 CST 2019
+#Thu Apr 11 16:18:15 CST 2019
 com.wzjwhut.examples.Application=org.springframework.stereotype.Component
+com.wzjwhut.examples.CityMapper=org.springframework.stereotype.Component
